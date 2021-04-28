@@ -16,6 +16,9 @@
 package org.traccar.protocol;
 
 import io.netty.channel.Channel;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.BaseProtocolDecoder;
 import org.traccar.DeviceSession;
 import org.traccar.NetworkMessage;
@@ -31,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FreematicsProtocolDecoder extends BaseProtocolDecoder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FreematicsProtocolDecoder.class);
 
     public FreematicsProtocolDecoder(Protocol protocol) {
         super(protocol);
@@ -38,6 +42,7 @@ public class FreematicsProtocolDecoder extends BaseProtocolDecoder {
 
     private Object decodeEvent(
             Channel channel, SocketAddress remoteAddress, String sentence) {
+        LOGGER.info("decodeEvent -- message from channel {}, remoteAddress {}, sentence {}", channel, remoteAddress, sentence);
 
         DeviceSession deviceSession = null;
         String event = null;
@@ -64,6 +69,7 @@ public class FreematicsProtocolDecoder extends BaseProtocolDecoder {
                     break;
             }
         }
+        LOGGER.info("Device session: {}", deviceSession);
 
         if (channel != null && deviceSession != null && event != null && time != null) {
             String message = String.format("1#EV=%s,RX=1,TS=%s", event, time);
@@ -76,6 +82,7 @@ public class FreematicsProtocolDecoder extends BaseProtocolDecoder {
 
     private Object decodePosition(
             Channel channel, SocketAddress remoteAddress, String sentence, String id) {
+        LOGGER.info("decodePosition -- message from channel {}, remoteAddress {}, sentence {}, id {}", channel, remoteAddress, sentence, id);
 
         DeviceSession deviceSession = getDeviceSession(channel, remoteAddress, id);
         if (deviceSession == null) {
@@ -184,6 +191,7 @@ public class FreematicsProtocolDecoder extends BaseProtocolDecoder {
             position.setTime(dateBuilder.getDate());
             positions.add(position);
         }
+        LOGGER.info("Result of decodePosition:\n {}", ReflectionToStringBuilder.toString(positions));
 
         return positions.isEmpty() ? null : positions;
     }
@@ -191,8 +199,9 @@ public class FreematicsProtocolDecoder extends BaseProtocolDecoder {
     @Override
     protected Object decode(
             Channel channel, SocketAddress remoteAddress, Object msg) throws Exception {
-
         String sentence = (String) msg;
+        LOGGER.info("decode -- message from channel {}, remoteAddress {}, sentence {}", channel, ReflectionToStringBuilder.toString(remoteAddress), sentence);
+
         int startIndex = sentence.indexOf('#');
         int endIndex = sentence.indexOf('*');
 

@@ -18,4 +18,16 @@ public class MotionHandlerTest {
 
     }
 
+    @Test
+    public void testMotion() {
+
+        MotionHandler motionHandler = new MotionHandler(0.01);
+
+        Position position = new Position();
+        position.setSpeed(0.1);
+        position = motionHandler.handlePosition(position);
+
+        assertEquals(true, position.getAttributes().get(Position.KEY_MOTION));
+    }
+
 }

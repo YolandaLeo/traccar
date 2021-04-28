@@ -1,14 +1,7 @@
 package org.traccar.database;
 
 import org.junit.Test;
-import org.traccar.model.Attribute;
-import org.traccar.model.Device;
-import org.traccar.model.Driver;
-import org.traccar.model.Geofence;
-import org.traccar.model.Group;
-import org.traccar.model.ManagedUser;
-import org.traccar.model.Position;
-import org.traccar.model.User;
+import org.traccar.model.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -48,6 +41,11 @@ public class DataManagerTest {
         assertFalse(insertPosition.contains("type"));
         assertFalse(insertPosition.contains("outdated"));
 
+    }
+
+    @Test
+    public void events() {
+        System.out.println(DataManager.constructObjectQuery(DataManager.ACTION_SELECT_ALL, Event.class, false));
     }
 
     @Test
