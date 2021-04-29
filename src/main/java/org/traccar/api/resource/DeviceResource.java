@@ -15,6 +15,8 @@
  */
 package org.traccar.api.resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.Context;
 import org.traccar.api.BaseObjectResource;
 import org.traccar.database.DeviceManager;
@@ -41,6 +43,7 @@ import java.util.Set;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class DeviceResource extends BaseObjectResource<Device> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeviceResource.class);
 
     public DeviceResource() {
         super(Device.class);
@@ -92,6 +95,7 @@ public class DeviceResource extends BaseObjectResource<Device> {
             Context.getPermissionsManager().checkManager(getUserId());
             Context.getPermissionsManager().checkPermission(Device.class, getUserId(), entity.getDeviceId());
         }
+        LOGGER.info("updateAccumulators: deviceId {}, distance {}, hours {}", entity.getDeviceId(), entity.getTotalDistance(), entity.getHours());
         Context.getDeviceManager().resetDeviceAccumulators(entity);
         LogAction.resetDeviceAccumulators(getUserId(), entity.getDeviceId());
         return Response.noContent().build();

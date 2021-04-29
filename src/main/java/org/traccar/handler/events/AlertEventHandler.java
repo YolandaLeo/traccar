@@ -19,6 +19,10 @@ import java.util.Collections;
 import java.util.Map;
 
 import io.netty.channel.ChannelHandler;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.traccar.api.resource.DeviceResource;
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.database.IdentityManager;
@@ -27,6 +31,7 @@ import org.traccar.model.Position;
 
 @ChannelHandler.Sharable
 public class AlertEventHandler extends BaseEventHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AlertEventHandler.class);
 
     private final IdentityManager identityManager;
     private final boolean ignoreDuplicateAlerts;
@@ -38,6 +43,7 @@ public class AlertEventHandler extends BaseEventHandler {
 
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
+        LOGGER.info("analyzePosition:{}", ReflectionToStringBuilder.toString(position));
         Object alarm = position.getAttributes().get(Position.KEY_ALARM);
         if (alarm != null) {
             boolean ignoreAlert = false;

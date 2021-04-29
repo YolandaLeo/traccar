@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import io.netty.channel.ChannelHandler;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.database.IdentityManager;
 import org.traccar.model.Device;
 import org.traccar.model.Event;
@@ -27,7 +30,7 @@ import org.traccar.model.Position;
 
 @ChannelHandler.Sharable
 public class IgnitionEventHandler extends BaseEventHandler {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(IgnitionEventHandler.class);
     private final IdentityManager identityManager;
 
     public IgnitionEventHandler(IdentityManager identityManager) {
@@ -36,6 +39,7 @@ public class IgnitionEventHandler extends BaseEventHandler {
 
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
+        LOGGER.info("analyzePosition: {}", ReflectionToStringBuilder.toString(position));
         Device device = identityManager.getById(position.getDeviceId());
         if (device == null || !identityManager.isLatestPosition(position)) {
             return null;

@@ -56,6 +56,7 @@ public class MotionEventHandler extends BaseEventHandler {
     }
 
     public Map<Event, Position> updateMotionState(DeviceState deviceState) {
+        LOGGER.info("updateMotionState: {}", ReflectionToStringBuilder.toString(deviceState));
         Map<Event, Position> result = null;
         if (deviceState.getMotionState() != null && deviceState.getMotionPosition() != null) {
             boolean newMotion = !deviceState.getMotionState();
@@ -71,6 +72,7 @@ public class MotionEventHandler extends BaseEventHandler {
     }
 
     public Map<Event, Position> updateMotionState(DeviceState deviceState, Position position) {
+        LOGGER.info("updateMotionState: deviceState {}, position {}", ReflectionToStringBuilder.toString(deviceState), ReflectionToStringBuilder.toString(position));
         return updateMotionState(deviceState, position, position.getBoolean(Position.KEY_MOTION));
     }
 
