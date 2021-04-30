@@ -43,7 +43,7 @@ public class MaintenanceEventHandler extends BaseEventHandler {
 
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
-        LOGGER.info("analyzePosition: {}", ReflectionToStringBuilder.toString(position));
+        LOGGER.info("Maintenance.analyzePosition: {}", ReflectionToStringBuilder.toString(position));
 
         if (identityManager.getById(position.getDeviceId()) == null
                 || !identityManager.isLatestPosition(position)) {

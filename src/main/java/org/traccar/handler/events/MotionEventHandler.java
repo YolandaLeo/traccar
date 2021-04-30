@@ -56,7 +56,7 @@ public class MotionEventHandler extends BaseEventHandler {
     }
 
     public Map<Event, Position> updateMotionState(DeviceState deviceState) {
-        LOGGER.info("updateMotionState: {}", ReflectionToStringBuilder.toString(deviceState));
+        LOGGER.info("Motion.updateMotionState: {}", ReflectionToStringBuilder.toString(deviceState));
         Map<Event, Position> result = null;
         if (deviceState.getMotionState() != null && deviceState.getMotionPosition() != null) {
             boolean newMotion = !deviceState.getMotionState();
@@ -72,7 +72,8 @@ public class MotionEventHandler extends BaseEventHandler {
     }
 
     public Map<Event, Position> updateMotionState(DeviceState deviceState, Position position) {
-        LOGGER.info("updateMotionState: deviceState {}, position {}", ReflectionToStringBuilder.toString(deviceState), ReflectionToStringBuilder.toString(position));
+        LOGGER.info("Motion.updateMotionState: deviceState {}, deviceState.MotionPosition {}, position {}", ReflectionToStringBuilder.toString(deviceState),
+                ReflectionToStringBuilder.toString(deviceState.getMotionPosition()), ReflectionToStringBuilder.toString(position));
         return updateMotionState(deviceState, position, position.getBoolean(Position.KEY_MOTION));
     }
 
@@ -115,7 +116,7 @@ public class MotionEventHandler extends BaseEventHandler {
 
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
-        LOGGER.info("analyzePosition: {}", ReflectionToStringBuilder.toString(position));
+        LOGGER.info("Motion.analyzePosition: {}", ReflectionToStringBuilder.toString(position));
 
         long deviceId = position.getDeviceId();
         Device device = identityManager.getById(deviceId);

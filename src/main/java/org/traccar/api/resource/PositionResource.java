@@ -16,21 +16,18 @@
 package org.traccar.api.resource;
 
 import org.traccar.Context;
+import org.traccar.Main;
 import org.traccar.api.BaseResource;
+import org.traccar.handler.events.MotionEventHandler;
+import org.traccar.model.DeviceState;
+import org.traccar.model.Event;
 import org.traccar.model.Position;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Path("positions")
 @Produces(MediaType.APPLICATION_JSON)
@@ -60,6 +57,20 @@ public class PositionResource extends BaseResource {
                 return Collections.singleton(Context.getDeviceManager().getLastPosition(deviceId));
             }
         }
+    }
+
+    @Path("/create")
+    @PUT
+    public Response putPositionForEvent(DeviceState deviceState) {
+        if (deviceState == null || deviceState.getMotionPosition() == null) {
+            throw new IllegalArgumentException("position and deviceState cannot be null");
+        }
+        MotionEventHandler motionEventHandler = Main.getInjector().getInstance(MotionEventHandler.class);
+        if (motionEventHandler == null) {
+            throw new RuntimeException("Main.getInjector().getInstance(MotionEventHandler.class) failed");
+        }
+        Map<Event, Position> result = motionEventHandler.updateMotionState(deviceState);
+        return Response.ok(result).build();
     }
 
 }

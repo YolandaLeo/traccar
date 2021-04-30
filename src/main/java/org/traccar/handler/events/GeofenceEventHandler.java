@@ -49,7 +49,7 @@ public class GeofenceEventHandler extends BaseEventHandler {
 
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
-        LOGGER.info("analyzePosition: {}", ReflectionToStringBuilder.toString(position));
+        LOGGER.info("Geofence.analyzePosition: {}", ReflectionToStringBuilder.toString(position));
 
         Device device = identityManager.getById(position.getDeviceId());
         if (device == null) {

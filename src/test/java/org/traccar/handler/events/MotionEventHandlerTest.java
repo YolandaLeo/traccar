@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -90,6 +91,33 @@ public class MotionEventHandlerTest extends BaseTest {
         assertNull(deviceState.getMotionPosition());
     }
 
+    @Test
+    public void testMotionEvent() {
+        MotionEventHandler motionEventHandler = new MotionEventHandler(
+                null, null, new TripsConfig(5, 0, 300 * 1000, 0, false, false, 0.001));
+        Position position = new Position();
+        position.setSpeed(45.1);
+        position.setAccuracy(8.23703509799714);
+        position.setDeviceTime(new Date());
+        position.setOutdated(false);
+        position.setDeviceId(2);
+        position.setValid(true);
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(Position.KEY_DISTANCE, 20.1);
+        attributes.put(Position.KEY_TOTAL_DISTANCE, 309128.02);
+        attributes.put(Position.KEY_MOTION, true);
+        position.setId(383);
+        position.setAttributes(attributes);
+        position.setAltitude(13.29246886726469);
+        position.setCourse(100.618292320579);
+        position.setFixTime(new Date());
+        DeviceState deviceState = new DeviceState();
+        deviceState.setMotionState(false);
+        deviceState.setMotionPosition(position);
+        deviceState.setOverspeedGeofenceId(0);
+        Map<Event, Position> events = motionEventHandler.updateMotionState(deviceState, position);
+
+    }
     @Test
     public void testStopWithPositionIgnition() throws Exception {
         MotionEventHandler motionEventHandler = new MotionEventHandler(

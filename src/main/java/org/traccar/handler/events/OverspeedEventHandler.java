@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import io.netty.channel.ChannelHandler;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.traccar.config.Config;
 import org.traccar.config.Keys;
 import org.traccar.database.DeviceManager;
@@ -32,7 +35,7 @@ import org.traccar.model.Position;
 
 @ChannelHandler.Sharable
 public class OverspeedEventHandler extends BaseEventHandler {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(OverspeedEventHandler.class);
     public static final String ATTRIBUTE_SPEED = "speed";
     public static final String ATTRIBUTE_SPEED_LIMIT = "speedLimit";
 
@@ -110,7 +113,7 @@ public class OverspeedEventHandler extends BaseEventHandler {
 
     @Override
     protected Map<Event, Position> analyzePosition(Position position) {
-
+        LOGGER.info("Overspeed.analyzePosition: {}", ReflectionToStringBuilder.toString(position));
         long deviceId = position.getDeviceId();
         Device device = deviceManager.getById(deviceId);
         if (device == null) {
